@@ -1,5 +1,7 @@
 """Shared provider interface and parameters for chat model calls."""
-from typing import Iterator, Optional, Protocol
+from __future__ import annotations
+
+from typing import Iterator, Protocol
 
 from pydantic import BaseModel, field_validator
 
@@ -7,10 +9,10 @@ from pydantic import BaseModel, field_validator
 class ChatParams(BaseModel):
     temperature: float = 1.0
     top_p: float = 1.0
-    top_k: Optional[int] = None          # Gemini only; ignored by the OpenAI provider
+    top_k: int | None = None          # Gemini only; ignored by the OpenAI provider
     max_output_tokens: int = 1024
-    seed: Optional[int] = None
-    stop_sequence: Optional[str] = None  # comma-separated for multiple stop strings
+    seed: int | None = None
+    stop_sequence: str | None = None  # comma-separated for multiple stop strings
 
     @field_validator("temperature")
     @classmethod
@@ -28,7 +30,7 @@ class ChatParams(BaseModel):
 
     @field_validator("top_k")
     @classmethod
-    def _check_top_k(cls, v: Optional[int]) -> Optional[int]:
+    def _check_top_k(cls, v: int | None) -> int | None:
         if v is not None and v < 1:
             raise ValueError("top_k must be >= 1")
         return v
