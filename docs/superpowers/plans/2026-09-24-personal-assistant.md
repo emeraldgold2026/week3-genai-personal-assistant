@@ -6,7 +6,7 @@
 
 **Architecture:** A FastAPI backend (`app/`) owns both API keys and provider SDK calls behind a shared `ChatProvider` interface, persists conversations/messages to SQLite, and streams model output to a static vanilla-JS frontend (`static/`) over Server-Sent Events.
 
-**Tech Stack:** Python 3.11+, FastAPI, Uvicorn, Pydantic v2, `sqlite3` (stdlib, no ORM), `openai` SDK, `google-genai` SDK, `python-dotenv`, pytest, vanilla HTML/CSS/JS (no frontend build step).
+**Tech Stack:** Python (this machine's environment is 3.9.6 — see Global Constraints), FastAPI, Uvicorn, Pydantic v2, `sqlite3` (stdlib, no ORM), `openai` SDK, `google-genai` SDK, `python-dotenv`, pytest, vanilla HTML/CSS/JS (no frontend build step).
 
 **Spec:** `docs/superpowers/specs/2026-09-24-personal-assistant-design.md`
 
@@ -18,6 +18,7 @@
 - No ORM — `app/db.py` uses the stdlib `sqlite3` module directly with parameterized queries.
 - No tool/function calling, JSON mode, file attachments, auth, or dynamic model listing in v1 (out of scope per spec).
 - Every backend module lives under `app/`; every frontend file lives under `static/`; every test lives under `tests/`, mirroring the module it tests.
+- **Environment correction (discovered during Task 2, ruled during execution):** this machine's Python is 3.9.6, not 3.11+ as originally stated. PEP 604 union syntax (`X | None`) still applies verbatim as written in every task below, but every Python file that uses it as a class-level or function-signature annotation must start with `from __future__ import annotations` (defers annotation evaluation to strings), and `requirements.txt` includes `eval_type_backport>=0.4` so Pydantic can resolve those deferred annotations on Python <3.10. `list[dict]`/`list[str]` subscripts do not need this (PEP 585 works natively on 3.9) — only actual `X | Y` unions do. Every task's code block below has already been updated with this import where needed; implementers should not need to rediscover this.
 
 ## Task Dependency Graph
 
@@ -57,6 +58,7 @@ Tasks 2, 5, and 9 can start in parallel once Task 1 is committed. Tasks 3 and 4 
 fastapi>=0.115
 uvicorn[standard]>=0.32
 pydantic>=2.9
+eval_type_backport>=0.4
 python-dotenv>=1.0
 openai>=1.55
 google-genai>=0.3
@@ -246,6 +248,8 @@ Expected: FAIL with `ModuleNotFoundError: No module named 'app.providers.base'`.
 
 ```python
 """Shared provider interface and parameters for chat model calls."""
+from __future__ import annotations
+
 from typing import Iterator, Protocol
 
 from pydantic import BaseModel, field_validator
@@ -450,6 +454,8 @@ Expected: FAIL with `ModuleNotFoundError: No module named 'app.providers.openai_
 
 ```python
 """OpenAI chat completion adapter implementing the ChatProvider interface."""
+from __future__ import annotations
+
 from typing import Iterator
 
 from openai import OpenAI
@@ -632,6 +638,8 @@ Expected: FAIL with `ModuleNotFoundError: No module named 'app.providers.gemini_
 
 ```python
 """Gemini chat adapter implementing the ChatProvider interface."""
+from __future__ import annotations
+
 from typing import Iterator
 
 from google import genai
@@ -803,6 +811,8 @@ Expected: FAIL with `ModuleNotFoundError: No module named 'app.db'`.
 
 ```python
 """SQLite persistence for conversations and messages. No ORM."""
+from __future__ import annotations
+
 import sqlite3
 import uuid
 from datetime import datetime, timezone
@@ -984,6 +994,8 @@ Expected: FAIL with `ModuleNotFoundError: No module named 'app.models'`.
 
 ```python
 """Pydantic request/response schemas for the HTTP API."""
+from __future__ import annotations
+
 from pydantic import BaseModel, Field
 
 from app.providers.base import ChatParams
@@ -1131,6 +1143,8 @@ Expected: FAIL with `ModuleNotFoundError: No module named 'app.main'`.
 
 ```python
 """FastAPI app: conversation CRUD routes and static frontend serving."""
+from __future__ import annotations
+
 import os
 
 from fastapi import FastAPI, HTTPException
