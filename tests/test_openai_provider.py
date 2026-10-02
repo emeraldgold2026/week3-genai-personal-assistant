@@ -22,7 +22,7 @@ def test_build_kwargs_maps_shared_params_and_drops_top_k():
     ]
     assert kwargs["temperature"] == 0.5
     assert kwargs["top_p"] == 0.9
-    assert kwargs["max_tokens"] == 256
+    assert kwargs["max_completion_tokens"] == 256
     assert kwargs["seed"] == 7
     assert kwargs["stop"] == ["END", "STOP"]
     assert kwargs["stream"] is True

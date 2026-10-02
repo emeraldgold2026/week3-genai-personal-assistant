@@ -46,7 +46,7 @@ class OpenAIProvider:
             "messages": [{"role": "system", "content": system_prompt}, *messages],
             "temperature": params.temperature,
             "top_p": params.top_p,
-            "max_tokens": params.max_output_tokens,
+            "max_completion_tokens": params.max_output_tokens,
             "stream": True,
         }
         if params.seed is not None:
