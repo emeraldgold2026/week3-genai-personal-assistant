@@ -3,6 +3,25 @@
 A local personal AI assistant web app for chatting with your own OpenAI and
 Gemini models, using your own API keys.
 
+## Origin
+
+This project started from a brief to build a local web app, titled "My
+Personal Assistant", that lets the user chat with either OpenAI or Google
+Gemini models using their own API keys, with a Playground-style parameter
+panel (temperature, top_p, top_k, max output tokens, seed, stop sequence)
+inspired by the attached Groq Console screenshots below. It was to run
+entirely on the user's machine, with API keys never leaving the backend
+process. (Restated from the [design spec](docs/superpowers/specs/2026-09-24-personal-assistant-design.md);
+the original chat prompt itself wasn't retained.)
+
+The referenced Groq Console screenshots that inspired the parameter panel:
+
+<p>
+  <img src="docs/screenshots/groq-console-1.png" alt="Groq Console screenshot 1" width="280">
+  <img src="docs/screenshots/groq-console-2.png" alt="Groq Console screenshot 2" width="280">
+  <img src="docs/screenshots/groq-console-3.png" alt="Groq Console screenshot 3" width="280">
+</p>
+
 ## Setup
 
 1. Create a virtual environment and install dependencies:
