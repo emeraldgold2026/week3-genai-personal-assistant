@@ -1,5 +1,70 @@
 <!doctype html>
-<html>
-  <head><title>My Personal Assistant</title></head>
-  <body><p>Coming soon.</p></body>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>My Personal Assistant</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="banner" class="banner" hidden></div>
+    <div class="layout">
+      <aside class="sidebar">
+        <button id="new-chat-btn">+ New Chat</button>
+        <ul id="sidebar-list"></ul>
+      </aside>
+
+      <main class="chat-panel">
+        <details class="system-prompt-box" open>
+          <summary>SYSTEM</summary>
+          <textarea id="system-prompt" placeholder="You are my personal assistant"></textarea>
+        </details>
+
+        <div id="message-thread" class="message-thread"></div>
+
+        <div class="input-row">
+          <textarea id="message-input" placeholder="Type a message..."></textarea>
+          <button id="send-btn">Submit</button>
+        </div>
+      </main>
+
+      <aside class="params-panel">
+        <h2>Parameters</h2>
+
+        <label for="provider-select">Provider</label>
+        <select id="provider-select">
+          <option value="openai">OpenAI</option>
+          <option value="gemini">Gemini</option>
+        </select>
+
+        <label for="model-select">Model</label>
+        <select id="model-select"></select>
+
+        <label for="temperature">Temperature</label>
+        <input type="range" id="temperature" min="0" max="2" step="0.01" value="1" />
+
+        <label for="top-p">Top P</label>
+        <input type="range" id="top-p" min="0" max="1" step="0.01" value="1" />
+
+        <div id="top-k-row">
+          <label for="top-k">Top K</label>
+          <input type="number" id="top-k" min="1" step="1" placeholder="(optional)" />
+        </div>
+
+        <label for="max-output-tokens">Max Output Tokens</label>
+        <input type="number" id="max-output-tokens" min="1" step="1" value="1024" />
+
+        <label for="seed">Seed</label>
+        <input type="number" id="seed" step="1" placeholder="(optional)" />
+
+        <label for="stop-sequence">Stop Sequence</label>
+        <input type="text" id="stop-sequence" placeholder="comma-separated (optional)" />
+
+        <label class="toggle-label">
+          <input type="checkbox" id="stream-toggle" checked />
+          Stream
+        </label>
+      </aside>
+    </div>
+    <script src="app.js" defer></script>
+  </body>
 </html>
